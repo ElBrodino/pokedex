@@ -5,6 +5,7 @@ import (
 )
 
 func cleanInput(text string) []string {
-	answer := strings.Join(strings.Fields(text), " ")
+	lowered := strings.ToLower(text)
+	answer := strings.Join(strings.Fields(lowered), " ")
 	return strings.Split(answer, " ")
 }

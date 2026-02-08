@@ -14,12 +14,12 @@ func TestCleanInput(t *testing.T) {
 			name:     "spaces front and back",
 			input:    "	hello	world	",
 			expected: []string{"hello", "world"},
-		}, /*
-			{
-				name:     "mixed case words",
-				input:    "Charmander Balbasaur PIKACHU",
-				expected: []string{"charmander", "balbasaur", "pikachu"},
-			},*/
+		},
+		{
+			name:     "mixed case words",
+			input:    "Charmander Balbasaur PIKACHU",
+			expected: []string{"charmander", "balbasaur", "pikachu"},
+		},
 	}
 
 	for _, c := range cases {
