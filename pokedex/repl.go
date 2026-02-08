@@ -1,1 +1,1 @@
-package cleanInput
+package main

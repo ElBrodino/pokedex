@@ -1,4 +1,4 @@
-package cleanInput
+package main
 
 import "fmt"
 
