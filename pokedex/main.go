@@ -29,8 +29,12 @@ func main() {
 		text := cleanInput(scanner.Text())
 
 		cmd, ok := commands[text[0]]
+		if len(text) == 0 {
+			continue
+		}
+
 		if !ok {
-			cleanInput(text[0])
+			fmt.Println("Unknown command")
 			continue
 		}
 		if err := cmd.callback(); err != nil {
