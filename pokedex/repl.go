@@ -15,16 +15,18 @@ type cliCommand struct {
 
 func startRepl() {
 
-	scanner := bufio.NewScanner(os.Stdin)
+	reader := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
-		scanner.Scan()
-		text := cleanInput(scanner.Text())
+		reader.Scan()
 
-		cmd, ok := commands[text[0]]
-		if len(text) == 0 {
+		words := cleanInput(reader.Text())
+		if len(words) == 0 {
 			continue
 		}
+
+		commandName := words[0]
+		cmd, ok := getCommands()[commandName]
 
 		if !ok {
 			fmt.Println("Unknown command")
@@ -43,15 +45,17 @@ func cleanInput(text string) []string {
 	return strings.Split(answer, " ")
 }
 
-var commands = map[string]cliCommand{
-	"exit": {
-		name:        "exit",
-		description: "Exit the Pokedex",
-		callback:    commandExit,
-	},
-	"help": {
-		name:        "help",
-		description: "Displays a help message",
-		callback:    commandHelp,
-	},
+func getCommands() map[string]cliCommand {
+	return map[string]cliCommand{
+		"exit": {
+			name:        "exit",
+			description: "Exit the Pokedex",
+			callback:    commandExit,
+		},
+		"help": {
+			name:        "help",
+			description: "Displays a help message",
+			callback:    commandHelp,
+		},
+	}
 }
