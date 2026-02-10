@@ -1,16 +1,30 @@
 package main
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 func commandMap(cfg *config) error {
-	if cfg.nextLocationsURL == nil {
-		url := "https://pokeapi.co/api/v2/location-area/"
-
-	} else {
-		url := *cfg.nextLocationsURL
+	// choose url
+	url := "https://pokeapi.co/api/v2/location-area"
+	if cfg.nextLocationsURL != nil {
+		url = *cfg.nextLocationsURL
 	}
-	http.Get(url)
+
+	// request
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
 	defer resp.Body.Close()
+
+	//temp
+	fmt.Println("status:", resp.Status)
+
+	// decode JSON
+
+	return nil
 }
 
 func commandMapB(cfg *config) error {

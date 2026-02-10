@@ -18,7 +18,12 @@ type config struct {
 	prevLocationsURL *string
 }
 
-func startRepl(cfg *config) {
+func startRepl() {
+
+	cfg := &config{
+		nextLocationsURL: nil,
+		prevLocationsURL: nil,
+	}
 
 	reader := bufio.NewScanner(os.Stdin)
 
