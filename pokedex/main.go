@@ -1,6 +1,6 @@
 package main
 
 func main() {
-	//fmt.Println("Hello, World!")
-	startRepl()
+	cfg := &config{}
+	startRepl(cfg)
 }
