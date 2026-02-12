@@ -6,6 +6,12 @@ import (
 	"net/http"
 )
 
+type ReapShallowCreatures struct {
+	Results []struct {
+		Name string `json:"name"`
+	} `json:"results"`
+}
+
 type ReapShallowlocations struct {
 	Next     *string `json:"next"`
 	Previous *string `json:"previous"`
@@ -14,6 +20,9 @@ type ReapShallowlocations struct {
 	} `json:"results"`
 }
 
+func (c *Client) ListCreatures(locationURL *string) (ReapShallowCreatures, error) {
+
+}
 func (c *Client) ListLocations(pageURL *string) (ReapShallowlocations, error) {
 	url := baseURL + "/location-area"
 	if pageURL != nil {
@@ -22,9 +31,9 @@ func (c *Client) ListLocations(pageURL *string) (ReapShallowlocations, error) {
 
 	val, ok := c.cache.Get(url)
 	if ok {
-		locationResp := ReapShallowlocations{}
-		json.Unmarshal(val, &locationResp)
-		return locationResp, nil
+		locationReap := ReapShallowlocations{}
+		json.Unmarshal(val, &locationReap)
+		return locationReap, nil
 	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
