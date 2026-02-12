@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"pokedex/internal/pokeapi"
 	"strings"
 )
 
@@ -16,6 +17,7 @@ type cliCommand struct {
 type config struct {
 	nextLocationsURL *string
 	prevLocationsURL *string
+	pokeapiClient    pokeapi.Client
 }
 
 func startRepl(cfg *config) {
