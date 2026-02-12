@@ -7,16 +7,16 @@ import (
 func commandMap(cfg *config) error {
 
 	// request
-	resp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
+	reap, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
 	if err != nil {
 		return err
 	}
 
-	for _, r := range resp.Results {
+	for _, r := range reap.Results {
 		fmt.Println(r.Name)
 	}
-	cfg.nextLocationsURL = resp.Next
-	cfg.prevLocationsURL = resp.Previous
+	cfg.nextLocationsURL = reap.Next
+	cfg.prevLocationsURL = reap.Previous
 
 	return nil
 }
