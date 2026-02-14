@@ -27,3 +27,18 @@ func TestStuff(t *testing.T) {
 		cleanInput(""),
 		[]string{""})
 }
+
+func TestCommandExplore(t *testing.T) {
+	cfg := &config{}
+
+	err := commandExplore(cfg)
+	assertEqual(t, "explore with no argumnents",
+		err.Error(),
+		"you must provide one a location name")
+
+	// Test case: too many arguments
+	err = commandExplore(cfg, "pastoria", "extra-arg")
+	assertEqual(t, "explore with too many arguments",
+		err.Error(),
+		"you must provide one a location name")
+}
