@@ -54,8 +54,33 @@ func (m *mockPokeAPI) GetLocation(name string) (pokeapi.Location, error) {
 	return m.mockLocationResp, m.mockError
 }
 
-func (m *mockPokeAPI) ListLocations(url *string) (pokeapi.RespShallowCreatures, error) {
+func (m *mockPokeAPI) ListLocations(url *string) (pokeapi.RespShallowLocations, error) {
 	return m.mockListResp, m.mockError
+}
+
+func TestCommandMap_UpdatesConfig(t *testing.T) {
+	next := "https://pokeapi.co/api/v2/location-area/?offset=20&limit=20"
+	prev := "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
+
+	mockClient := &mockPokeAPI{
+		mockListResp: pokeapi.RespShallowLocations{
+			Next:     &next,
+			Previous: &prev,
+			Results: []pokeapi.ShallowLocation{
+				{Name: "location-1"},
+			},
+		},
+	}
+
+	cfg := &config{
+		pokeAPIClient: mockClient,
+	}
+
+	err := commandMap(cfg)
+	assertEqual(t, "map should not error", err, nil)
+
+	assertEqual(t, "config.nestsLocationURL should be updated", cfg.nextLocationsURL, &next)
+	assertEqual(t, "config.prevLocationURL should be updated", cfg.prevLocationsURL, &prev)
 }
 
 func TestCommandExplore_Success(t *testing.T) {

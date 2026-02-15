@@ -12,12 +12,15 @@ type RespShallowCreatures struct {
 	} `json:"results"`
 }
 
+type ShallowLocation struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
+
 type RespShallowLocations struct {
-	Next     *string `json:"next"`
-	Previous *string `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-	} `json:"results"`
+	Next     *string           `json:"next"`
+	Previous *string           `json:"previous"`
+	Results  []ShallowLocation `json:"results"`
 }
 
 func (c *Client) GetLocation(locationName string) (Location, error) {
