@@ -6,23 +6,6 @@ import (
 	"net/http"
 )
 
-type RespShallowCreatures struct {
-	Results []struct {
-		Name string `json:"name"`
-	} `json:"results"`
-}
-
-type ShallowLocation struct {
-	Name string `json:"name"`
-	URL  string `json:"url"`
-}
-
-type RespShallowLocations struct {
-	Next     *string           `json:"next"`
-	Previous *string           `json:"previous"`
-	Results  []ShallowLocation `json:"results"`
-}
-
 func (c *Client) GetLocation(locationName string) (Location, error) {
 	url := baseURL + "/location-area/" + locationName
 	out := Location{}

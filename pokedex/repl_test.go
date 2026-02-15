@@ -85,24 +85,20 @@ func TestCommandMap_UpdatesConfig(t *testing.T) {
 
 func TestCommandExplore_Success(t *testing.T) {
 	expectedLocation := pokeapi.Location{
-		Name: "pastoria",
-		PokemonEncounters: []struct {
-			Pokemon struct {
-				Name string `json:"Name"`
-			} `json:"pokemon"`
-		}{
-			{Pokemon: struct {
-				Name string `json:"Name"`
-			}{Name: "pikachu"}},
-			{Pokemon: struct {
-				Name string `"json:"Name"`
-			}{Name: "mew"}},
+		Name: "pastoria-city-area",
+		PokemonEncounters: []pokeapi.PokemonEncounters{
+			{
+				Pokemon: pokeapi.Pokemon{Name: "magikarp"},
+			},
+			{
+				Pokemon: pokeapi.Pokemon{Name: "gyarados"},
+			},
 		},
 	}
 
 	cfg := &config{
 		pokeAPIClient: &mockPokeAPI{
-			mockResponse: expectedLocation,
+			mockLocationResp: expectedLocation,
 		},
 	}
 

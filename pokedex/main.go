@@ -9,7 +9,7 @@ func main() {
 	client := pokeapi.NewClient(5*time.Second, 5*time.Second)
 
 	cfg := &config{
-		pokeAPIClient: client,
+		pokeAPIClient: &client,
 	}
 	startRepl(cfg)
 }
