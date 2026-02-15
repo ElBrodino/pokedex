@@ -14,7 +14,7 @@ func assertEqual(t *testing.T, desc, got, want any) {
 	}
 }
 
-func TestStuff(t *testing.T) {
+func TestCleanInput(t *testing.T) {
 	assertEqual(t, "Spaces front and back and middle",
 		cleanInput("   	hello	world   "),
 		[]string{"hello", "world"})
@@ -59,8 +59,8 @@ func (m *mockPokeAPI) ListLocations(url *string) (pokeapi.RespShallowLocations, 
 }
 
 func TestCommandMap_UpdatesConfig(t *testing.T) {
-	next := "https://pokeapi.co/api/v2/location-area/?offset=20&limit=20"
-	prev := "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
+	next := pokeapi.BaseURL + "/location-area/?offset=20&limit=20"
+	prev := pokeapi.BaseURL + "/location-area/?offset=0&limit=20"
 
 	mockClient := &mockPokeAPI{
 		mockListResp: pokeapi.RespShallowLocations{

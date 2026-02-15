@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Client) GetLocation(locationName string) (Location, error) {
-	url := baseURL + "/location-area/" + locationName
+	url := BaseURL + "/location-area/" + locationName
 	out := Location{}
 
 	if val, ok := c.cache.Get(url); ok {
@@ -44,7 +44,7 @@ func (c *Client) GetLocation(locationName string) (Location, error) {
 }
 
 func (c *Client) ListLocations(pageURL *string) (RespShallowLocations, error) {
-	url := baseURL + "/location-area"
+	url := BaseURL + "/location-area"
 	if pageURL != nil {
 		url = *pageURL
 	}
