@@ -6,13 +6,13 @@ import (
 	"net/http"
 )
 
-type ReapShallowCreatures struct {
+type RespShallowCreatures struct {
 	Results []struct {
 		Name string `json:"name"`
 	} `json:"results"`
 }
 
-type ReapShallowlocations struct {
+type RespShallowLocations struct {
 	Next     *string `json:"next"`
 	Previous *string `json:"previous"`
 	Results  []struct {
@@ -57,7 +57,7 @@ func (c *Client) GetLocation(locationName string) (Location, error) {
 
 }
 
-func (c *Client) ListLocations(pageURL *string) (ReapShallowlocations, error) {
+func (c *Client) ListLocations(pageURL *string) (RespShallowLocations, error) {
 	url := baseURL + "/location-area"
 	if pageURL != nil {
 		url = *pageURL
@@ -65,29 +65,29 @@ func (c *Client) ListLocations(pageURL *string) (ReapShallowlocations, error) {
 
 	val, ok := c.cache.Get(url)
 	if ok {
-		locationReap := ReapShallowlocations{}
+		locationReap := RespShallowLocations{}
 		json.Unmarshal(val, &locationReap)
 		return locationReap, nil
 	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return ReapShallowlocations{}, err
+		return RespShallowLocations{}, err
 	}
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return ReapShallowlocations{}, err
+		return RespShallowLocations{}, err
 	}
 	defer resp.Body.Close()
 
 	dat, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return ReapShallowlocations{}, err
+		return RespShallowLocations{}, err
 	}
 
-	var out ReapShallowlocations
+	var out RespShallowLocations
 	if err := json.Unmarshal(dat, &out); err != nil {
-		return ReapShallowlocations{}, err
+		return RespShallowLocations{}, err
 	}
 
 	c.cache.Add(url, dat)

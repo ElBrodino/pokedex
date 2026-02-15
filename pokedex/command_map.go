@@ -7,7 +7,7 @@ import (
 func commandMap(cfg *config, args ...string) error {
 
 	// request
-	reap, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
+	reap, err := cfg.pokeAPIClient.ListLocations(cfg.nextLocationsURL)
 	if err != nil {
 		return err
 	}
@@ -27,7 +27,7 @@ func commandMapB(cfg *config, args ...string) error {
 		return nil
 	}
 
-	resp, err := cfg.pokeapiClient.ListLocations(cfg.prevLocationsURL)
+	resp, err := cfg.pokeAPIClient.ListLocations(cfg.prevLocationsURL)
 	if err != nil {
 		return err
 	}

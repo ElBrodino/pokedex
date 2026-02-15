@@ -1,6 +1,7 @@
 package main
 
 import (
+	"pokedex/internal/pokeapi"
 	"reflect"
 	"testing"
 )
@@ -41,4 +42,46 @@ func TestCommandExplore(t *testing.T) {
 	assertEqual(t, "explore with too many arguments",
 		err.Error(),
 		"you must provide one a location name")
+}
+
+type mockPokeAPI struct {
+	mockLocationResp pokeapi.Location
+	mockListResp     pokeapi.RespShallowLocations
+	mockError        error
+}
+
+func (m *mockPokeAPI) GetLocation(name string) (pokeapi.Location, error) {
+	return m.mockLocationResp, m.mockError
+}
+
+func (m *mockPokeAPI) ListLocations(url *string) (pokeapi.RespShallowCreatures, error) {
+	return m.mockListResp, m.mockError
+}
+
+func TestCommandExplore_Success(t *testing.T) {
+	expectedLocation := pokeapi.Location{
+		Name: "pastoria",
+		PokemonEncounters: []struct {
+			Pokemon struct {
+				Name string `json:"Name"`
+			} `json:"pokemon"`
+		}{
+			{Pokemon: struct {
+				Name string `json:"Name"`
+			}{Name: "pikachu"}},
+			{Pokemon: struct {
+				Name string `"json:"Name"`
+			}{Name: "mew"}},
+		},
+	}
+
+	cfg := &config{
+		pokeAPIClient: &mockPokeAPI{
+			mockResponse: expectedLocation,
+		},
+	}
+
+	err := commandExplore(cfg, "pastora")
+
+	assertEqual(t, "should not error on valid location", err, nil)
 }

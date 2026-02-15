@@ -8,7 +8,7 @@ func commandExplore(cfg *config, args ...string) error {
 	if len(args) != 1 {
 		return fmt.Errorf("you must provide one a location name")
 	}
-	location, err := cfg.pokeapiClient.GetLocation(args[0])
+	location, err := cfg.pokeAPIClient.GetLocation(args[0])
 	if err != nil {
 		fmt.Printf("Error : %v", err)
 	}
