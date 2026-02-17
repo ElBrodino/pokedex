@@ -1,10 +1,15 @@
 package pokeapi
 
+type NamedAPIResource struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
+
 type PokemonEncounters struct {
-	Pokemon Pokemon `json:"pokemon"`
+	Pokemon NamedAPIResource `json:"pokemon"`
 }
 
 type Pokemon struct {
-	Name string `json:"name:"`
-	URL  string `json:"url"`
+	Name           string `json:"name:"`
+	BaseExperience int    `json:"base_experience"`
 }

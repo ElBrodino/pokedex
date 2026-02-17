@@ -10,6 +10,7 @@ func main() {
 
 	cfg := &config{
 		pokeAPIClient: &client,
+		caughtPokemon: make(map[string]pokeapi.Pokemon),
 	}
 	startRepl(cfg)
 }

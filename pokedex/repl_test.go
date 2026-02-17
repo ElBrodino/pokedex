@@ -35,19 +35,27 @@ func TestCommandExplore(t *testing.T) {
 	err := commandExplore(cfg)
 	assertEqual(t, "explore with no argumnents",
 		err.Error(),
-		"you must provide one a location name")
+		"you must provide a location name")
 
 	// Test case: too many arguments
 	err = commandExplore(cfg, "pastoria", "extra-arg")
 	assertEqual(t, "explore with too many arguments",
 		err.Error(),
-		"you must provide one a location name")
+		"you must provide a location name")
 }
 
 type mockPokeAPI struct {
 	mockLocationResp pokeapi.Location
 	mockListResp     pokeapi.RespShallowLocations
+	mockPokemon      pokeapi.Pokemon
 	mockError        error
+}
+
+func (m *mockPokeAPI) GetPokemon(name string) (pokeapi.Pokemon, error) {
+	if m.mockError != nil {
+		return pokeapi.Pokemon{}, m.mockError
+	}
+	return m.mockPokemon, nil
 }
 
 func (m *mockPokeAPI) GetLocation(name string) (pokeapi.Location, error) {
@@ -71,6 +79,7 @@ func TestCommandMap_UpdatesConfig(t *testing.T) {
 			},
 		},
 	}
+	//mockPokemon := &mockPokemon
 
 	cfg := &config{
 		pokeAPIClient: mockClient,
@@ -87,12 +96,8 @@ func TestCommandExplore_Success(t *testing.T) {
 	expectedLocation := pokeapi.Location{
 		Name: "pastoria-city-area",
 		PokemonEncounters: []pokeapi.PokemonEncounters{
-			{
-				Pokemon: pokeapi.Pokemon{Name: "magikarp"},
-			},
-			{
-				Pokemon: pokeapi.Pokemon{Name: "gyarados"},
-			},
+			{Pokemon: pokeapi.NamedAPIResource{Name: "magikarp"}},
+			{Pokemon: pokeapi.NamedAPIResource{Name: "gyarados"}},
 		},
 	}
 
@@ -105,4 +110,17 @@ func TestCommandExplore_Success(t *testing.T) {
 	err := commandExplore(cfg, "pastora")
 
 	assertEqual(t, "should not error on valid location", err, nil)
+}
+
+func TestCatch(t *testing.T) {
+	
+	cfg := &config{
+		pokeAPIClient: &mockPokeAPI{
+			mockPokemon: pokeapi.Pokemon{Name: "magikarp", BaseExperience: 50},
+		},
+		caughtPokemon: make(map[string]pokeapi.Pokemon),
+	}
+
+	err := commandCatch(cfg, "magikarp")
+	assertEqual(t, "should not error on pokemon", err, nil)
 }
