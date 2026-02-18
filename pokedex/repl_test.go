@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"pokedex/internal/pokeapi"
 	"reflect"
 	"testing"
@@ -49,7 +48,7 @@ type mockPokeAPI struct {
 	mockLocationResp pokeapi.Location
 	mockListResp     pokeapi.RespShallowLocations
 	mockError        error
-	mockPokemonResp map[string]pokeapi.Pokemon
+	mockPokemonResp  map[string]pokeapi.Pokemon
 }
 
 func (m *mockPokeAPI) GetPokemon(name string) (pokeapi.Pokemon, error) {
@@ -118,7 +117,7 @@ func TestCommandExplore_Success(t *testing.T) {
 }
 
 func TestCatch(t *testing.T) {
-	
+
 	cfg := &config{
 		pokeAPIClient: &mockPokeAPI{},
 		caughtPokemon: make(map[string]pokeapi.Pokemon),
@@ -129,24 +128,38 @@ func TestCatch(t *testing.T) {
 }
 
 func TestCaught(t *testing.T) {
-
+	//1. Setup cfg
 	cfg := &config{
-		pokeAPIClient: &mockPokeAPI{
-			mockPokemonResp: map[string]pokeapi.Pokemon{
-				"bulbasaur": {Name: "bulbasaur", BaseExperience: 64},
-				"pikachu":   {Name: "pikachu", BaseExperience: 112},
-			},
-		},
+		pokeAPIClient: &mockPokeAPI{},
 		caughtPokemon: make(map[string]pokeapi.Pokemon),
 	}
 
-	bulbasaurData, _ := cfg.pokeAPIClient.GetPokemon("bulbasaur")
-	cfg.caughtPokemon["bulbasaur"] = bulbasaurData
+	pokemonName := "bulbasaur"
 
-	pikachuData, _ := cfg.pokeAPIClient.GetPokemon("pikachu")
-	cfg.caughtPokemon["pikachu"] = pikachuData
+	//2. Run catch command
+	err := commandCatch(cfg, pokemonName)
+	assertEqual(t, "should not error on catch", err, nil)
 
-	for _, pokemon := range cfg.caughtPokemon {
-		fmt.Println(pokemon.Name, pokemon.BaseExperience)
-	}
+	//3. verify addition
+	captured, ok := cfg.caughtPokemon[pokemonName]
+	assertEqual(t, "pokemon should be in caught list", ok, true)
+
+	// 4. verify the details
+	assertEqual(t, "caught pokemon name should match", captured.Name, pokemonName)
+
+	// 5. Verify total count
+	assertEqual(t, "pokedex should have same amount", len(cfg.caughtPokemon), 1)
+
+	//6. catch a seond pokemon
+	pokemonName = "pikachu"
+
+	err = commandCatch(cfg, pokemonName)
+	assertEqual(t, "Second catch should not error", err, nil)
+
+	_, ok = cfg.caughtPokemon["pikachu"]
+	assertEqual(t, "pikachu should be in caught list", ok, true)
+	_, ok = cfg.caughtPokemon["bulbasaur"]
+	assertEqual(t, "bulbasaur should be in caught list", ok, true)
+	assertEqual(t, "pokedex should have 2 creatures", len(cfg.caughtPokemon), 2)
+
 }
