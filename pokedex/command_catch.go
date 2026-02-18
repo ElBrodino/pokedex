@@ -21,7 +21,7 @@ func commandCatch(cfg *config, args ...string) error {
 
 	chance := rand.Intn(pokemon.BaseExperience)
 
-	if chance < 10 {
+	if chance > 40 {
 		fmt.Printf("%s escaped!\n", name)
 		return nil
 	}
