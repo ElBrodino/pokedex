@@ -5,6 +5,7 @@ import (
 	"pokedex/internal/pokeapi"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func assertEqual(t *testing.T, desc, got, want any) {
@@ -166,8 +167,10 @@ func TestCaught(t *testing.T) {
 }
 
 func TestInspect(t *testing.T) {
+	client := pokeapi.NewClient(5*time.Second, 5*time.Second)
+
 	cfg := &config{
-		pokeAPIClient: &mockPokeAPI{},
+		pokeAPIClient: &client,
 		caughtPokemon: make(map[string]pokeapi.Pokemon),
 	}
 
@@ -191,4 +194,5 @@ func TestInspect(t *testing.T) {
 	}
 
 	commandInspect(cfg, pokemonList[0])
+	commandInspect(cfg, pokemonList[1])
 }

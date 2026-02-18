@@ -21,7 +21,7 @@ func commandInspect(cfg *config, args ...string) error {
 	}
 	fmt.Println("Types:")
 	for _, x := range creature.Types {
-		fmt.Printf("- %s", x.Type.Name)
+		fmt.Printf("- %s\n", x.Type.Name)
 	}
 
 	return nil
