@@ -47,15 +47,15 @@ func TestCommandExplore(t *testing.T) {
 type mockPokeAPI struct {
 	mockLocationResp pokeapi.Location
 	mockListResp     pokeapi.RespShallowLocations
-	mockPokemon      pokeapi.Pokemon
 	mockError        error
+	mockPokemonResp map[string]pokeapi.Pokemon
 }
 
 func (m *mockPokeAPI) GetPokemon(name string) (pokeapi.Pokemon, error) {
 	if m.mockError != nil {
 		return pokeapi.Pokemon{}, m.mockError
 	}
-	return m.mockPokemon, nil
+	return m.mockPokemonResp[name], nil
 }
 
 func (m *mockPokeAPI) GetLocation(name string) (pokeapi.Location, error) {
@@ -116,7 +116,6 @@ func TestCatch(t *testing.T) {
 	
 	cfg := &config{
 		pokeAPIClient: &mockPokeAPI{
-			mockPokemon: pokeapi.Pokemon{Name: "magikarp", BaseExperience: 50},
 		},
 		caughtPokemon: make(map[string]pokeapi.Pokemon),
 	}

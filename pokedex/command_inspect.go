@@ -11,9 +11,10 @@ func commandInspect(cfg *config, args ...string) error {
 	}
 
 	name := strings.ToLower(args[0])
-	for _;
-	if cfg.caughtPokemon != name {
-		fmt.Printf("")
+	for i := range cfg.caughtPokemon {
+		if i == name {
+			fmt.Printf("")
+		}
 	}
 	return nil
 }
