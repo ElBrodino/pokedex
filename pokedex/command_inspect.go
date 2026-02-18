@@ -11,10 +11,18 @@ func commandInspect(cfg *config, args ...string) error {
 	}
 
 	name := strings.ToLower(args[0])
-	for i := range cfg.caughtPokemon {
-		if i == name {
-			fmt.Printf("")
-		}
+	creature := cfg.caughtPokemon[name]
+	fmt.Printf("Name: %s\n", creature.Name)
+	fmt.Printf("Height: %d\n", creature.Height)
+	fmt.Printf("Weight: %d\n", creature.Weight)
+	fmt.Println("Stats:")
+	for _, x := range creature.Stats {
+		fmt.Printf("-%s: %d\n", x.Stat.Name, x.BaseStat)
 	}
+	fmt.Println("Types:")
+	for _, x := range creature.Types {
+		fmt.Printf("- %s", x.Type.Name)
+	}
+
 	return nil
 }

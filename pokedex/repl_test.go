@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"pokedex/internal/pokeapi"
 	"reflect"
 	"testing"
@@ -162,4 +163,32 @@ func TestCaught(t *testing.T) {
 	assertEqual(t, "bulbasaur should be in caught list", ok, true)
 	assertEqual(t, "pokedex should have 2 creatures", len(cfg.caughtPokemon), 2)
 
+}
+
+func TestInspect(t *testing.T) {
+	cfg := &config{
+		pokeAPIClient: &mockPokeAPI{},
+		caughtPokemon: make(map[string]pokeapi.Pokemon),
+	}
+
+	pokemonList := [2]string{"bulbasaur", "squirtle"}
+
+	// catching 2 pokemons
+	for _, x := range pokemonList {
+		attempts := 0
+		for {
+			attempts++
+			_ = commandCatch(cfg, x)
+
+			if _, ok := cfg.caughtPokemon[x]; ok {
+				fmt.Printf("caught at attempt %d\n", attempts)
+				break
+			}
+			if attempts >= 100 {
+				t.Fatal("gave up after 100 attempts")
+			}
+		}
+	}
+
+	commandInspect(cfg, pokemonList[0])
 }
