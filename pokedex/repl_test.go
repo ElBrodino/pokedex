@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"pokedex/internal/pokeapi"
 	"reflect"
 	"testing"
@@ -122,4 +123,27 @@ func TestCatch(t *testing.T) {
 
 	err := commandCatch(cfg, "magikarp")
 	assertEqual(t, "should not error on pokemon", err, nil)
+}
+
+func TestCaught(t *testing.T) {
+
+	cfg := &config{
+		pokeAPIClient: &mockPokeAPI{
+			mockPokemonResp: map[string]pokeapi.Pokemon{
+				"bulbasaur": {Name: "bulbasaur", BaseExperience: 64},
+				"pikachu":   {Name: "pikachu", BaseExperience: 112},
+			},
+		},
+		caughtPokemon: make(map[string]pokeapi.Pokemon),
+	}
+
+	bulbasaurData, _ := cfg.pokeAPIClient.GetPokemon("bulbasaur")
+	cfg.caughtPokemon["bulbasaur"] = bulbasaurData
+
+	pikachuData, _ := cfg.pokeAPIClient.GetPokemon("pikachu")
+	cfg.caughtPokemon["pikachu"] = pikachuData
+
+	for _, pokemon := range cfg.caughtPokemon {
+		fmt.Println(pokemon.Name, pokemon.BaseExperience)
+	}
 }
