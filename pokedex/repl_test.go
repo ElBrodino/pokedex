@@ -56,7 +56,11 @@ func (m *mockPokeAPI) GetPokemon(name string) (pokeapi.Pokemon, error) {
 	if m.mockError != nil {
 		return pokeapi.Pokemon{}, m.mockError
 	}
-	return m.mockPokemonResp[name], nil
+	//return m.mockPokemonResp[name], nil
+	return pokeapi.Pokemon{
+		Name:           name,
+		BaseExperience: 50,
+	}, nil
 }
 
 func (m *mockPokeAPI) GetLocation(name string) (pokeapi.Location, error) {
@@ -116,8 +120,7 @@ func TestCommandExplore_Success(t *testing.T) {
 func TestCatch(t *testing.T) {
 	
 	cfg := &config{
-		pokeAPIClient: &mockPokeAPI{
-		},
+		pokeAPIClient: &mockPokeAPI{},
 		caughtPokemon: make(map[string]pokeapi.Pokemon),
 	}
 
